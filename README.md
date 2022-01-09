@@ -1,5 +1,11 @@
-# ruby-projects
+# Ruby Projects
 A collection of ruby projects
+
+## Tic Tac Toe
+
+View: https://replit.com/@timjedrek/TicTacToe#main.rb
+
+A game of Tic Tac Toe using Ruby
 
 ## BubbleSort ##
 
