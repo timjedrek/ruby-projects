@@ -6,6 +6,7 @@ A collection of ruby projects
 View: https://replit.com/@timjedrek/TicTacToe#main.rb
 
 A game of Tic Tac Toe using Ruby
+Completed January 9, 2022
 
 ## BubbleSort ##
 
