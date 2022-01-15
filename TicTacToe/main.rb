@@ -1,181 +1,205 @@
+#control the game play
+class Game
+
+  def initialize 
+      @board = Board.new
+      @player_1 = Player.new(name = "", symbol = "X", @board)
+      @player_2 = Player.new(name = "", symbol = "O", @board)
+      @current_player = @player_1
+      @waiting_player = @player_2
+      puts 'Player 1 will be "X". Please enter your name'
+      @player_1.name = gets.chomp
+      puts 'Player 2 will be "O". Please enter your name'
+      @player_2.name = gets.chomp
+  end
+    
+  def play
+    @board.show
+    until game_over
+      player_move
+      switch_player
+    end
+    play_again
+  end
+
+  def game_over
+    game_won || draw
+  end
+
+  def game_won
+    if @board.winning_combo?
+      puts "#{@waiting_player.name} has won the game!"
+      true
+    else
+      false
+    end
+  end
+
+  def draw
+    if @board.full?
+      puts "It's a tie"
+      true
+    else 
+      false
+    end
+  end
+
+  def switch_player
+    if @current_player == @player_1
+      @current_player = @player_2
+      @waiting_player = @player_1
+    else
+      @current_player = @player_1
+      @waiting_player = @player_2
+    end
+  end
+
+  def player_move
+    input = @current_player.get_input(@current_player.name)
+      if @board.move_available?(input.to_i, @current_player.symbol, @waiting_player.symbol)
+        @board.place_symbol(input.to_i, @current_player.symbol)
+      else
+        until @board.move_available?(input.to_i, @current_player.symbol, @waiting_player.symbol)
+          puts "Cell number #{input} is taken. Try again."
+          input = @current_player.get_input(@current_player.name)
+        end
+        @board.place_symbol(input.to_i, @current_player.symbol)
+      end
+    @board.show
+    puts "#{@current_player.name} entered #{input}"
+  end
+
+  VALID_PLAY_AGAIN_RESPONSE = ["y","Y","n","N"]
+
+  def valid_play_again_response?(input)
+    VALID_PLAY_AGAIN_RESPONSE.include? input
+  end
+
+  def play_again
+    puts "Play again? (Y/N)"
+    input = gets.chomp.to_s
+
+    
+    if valid_play_again_response?(input)
+      handle_play_again_response(input)
+    else
+      until valid_play_again_response?(input)
+        puts "Please enter Y or N"
+        input = gets.chomp.to_s
+      end
+      handle_play_again_response(input)
+    end
+  end
+
+  def handle_play_again_response(input)
+      if input == "y" || input ==  "Y"
+        puts "Let's play again!"
+        @board.reset
+        @current_player = @player_1
+        play
+      elsif input == "n" || input == "N"
+        puts "Have a nice day!"
+      end
+  end
+
+end
+
+#manage all player functionality
+class Player
+  
+  attr_accessor :name, :symbol
+
+  def initialize(name, symbol, board)
+    @name = name
+    @symbol = symbol
+    @board = board
+  end
+  
+  def get_input(player)
+      
+    puts "#{player} please enter a move"
+    x = gets.chomp
+    if valid?(x)
+      x
+    else
+      until valid?(x)
+        puts "Try again.  #{x} is not valid.  #{player} please enter a move" 
+        x = gets.chomp
+      end
+      x
+    end
+
+  end
+
+  def valid?(number_input)
+    if valid_range?(number_input.to_i)
+      true
+    else
+      false
+    end
+  end
+
+  def valid_range?(number_input)
+    if number_input > 0 && number_input <=9
+      true
+    else
+      false
+    end
+  end
+end
+
+
+#maintains the board state
 class Board
-    @@rows = [
-      %w[1 2 3],
-      %w[4 5 6],
-      %w[7 8 9]
-    ]
-  
-    def self.rows
-      @@rows
+
+  attr_reader :cells
+
+  def initialize
+    @cells = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+  end
+
+  def show
+    puts <<-HEREDOC
+     #{cells[0]} | #{cells[1]} | #{cells[2]}
+     ---+---+---
+     #{cells[3]} | #{cells[4]} | #{cells[5]}
+     ---+---+---
+     #{cells[6]} | #{cells[7]} | #{cells[8]}
+    HEREDOC
+  end
+
+  def place_symbol(cell_number, current_symbol)
+    @cells[cell_number - 1] = current_symbol
+  end
+
+  def move_available?(cell_number, current_symbol, waiting_symbol)
+    if (@cells[cell_number - 1] == current_symbol) || (@cells[cell_number - 1] == waiting_symbol)
+      false
+    else
+      true
     end
+  end
+    
+  def full?
+    cells.all? { |cell| cell =~ /[^0-9]/ }
+  end
+
   
-    def self.show
-      (@@rows.length - 1).times do |i|
-        puts "\t\s #{rows[i].join(' | ')}"
-        puts "\t ---+---+---"
-      end
-      puts "\t\s #{rows[2].join(' | ')}"
-      puts "\n"
-    end
-  
-    def self.reset
-      @@rows = [
-        %w[1 2 3],
-        %w[4 5 6],
-        %w[7 8 9]
-      ]
-    end
-  
-    def self.check_winners
-      cells = rows.flatten
-      valid_wins = [
-        [0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6],
-        [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]
-      ]
-  
-      valid_wins.any? do |valid|
+  WINNING_COMBOS = [
+  [0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6],
+  [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]
+  ]
+
+  def winning_combo?
+    WINNING_COMBOS.any? do |valid|
         [cells[valid[0]], cells[valid[1]], cells[valid[2]]].uniq.length == 1
-      end
-    end
-  
-    def self.check_tie
-      rows.flatten.all? { |x| x =~ /\D/}
     end
   end
-  
-  # Class containing method to check for correct input
-  class InputCheck
-    def self.valid(num)
-      if integer?(num)
-        if num.to_i.positive? && num.to_i < 10
-          case num.to_i
-          when (1..3) then return row_check(num, 0)
-          when (4..6) then return row_check(num, 1)
-          when (7..9) then return row_check(num, 2)
-          end
-        end
-        return 'ERRNUM'
-      end
-      'NAN'
-    end
-  
-    class << self
-      private
-  
-      def row_check(num, row)
-        if Board.rows[row].include?(num)
-          row
-        else
-          false
-        end
-      end
-  
-      def integer?(num)
-        num.to_i.to_s == num
-      end
-    end
+
+  def reset
+    @cells = [1, 2, 3, 4, 5, 6, 7, 8, 9]
   end
-  
-  # Contains method for playing an input
-  class Player
-    attr_reader :name, :char
-  
-    @@played = false
-    def initialize(name, char)
-      @name = name
-      @char = char
-    end
-  
-    def play
-      Board.show
-      num = input
-      check = InputCheck.valid(num)
-      case check
-      when false then puts "#{name}, Please input a number (1-9), that's still available!"
-      when 'NAN' then puts "#{name}, Please input a number between 1 & 9!"
-      when 'ERRNUM' then puts "#{name}, Please input a number between 1 & 9, and nothing more or less."
-      else update_board(num, check) end
-    end
-  
-    def self.played
-      @@played
-    end
-  
-    def self.played=(new)
-      @@played = new
-    end
-  
-    private
-  
-    def input
-      puts "#{@name}, Please input a number (1-9), that's still on the board."
-      gets.chomp
-    end
-  
-    def update_board(num, row)
-      Board.rows[row][Board.rows[row].index(num)] = @char
-      @@played = true
-    end
-  end
-  
-  # Contains all methods regarding the game
-  class Game
-    def self.play_game(one, two)
-      turn = main_loop(one, two)
-      win_text(turn, one, two)
-    end
-  
-    def self.new_player(other = 'none')
-      puts 'Player, what is your name?'
-      name = gets.chomp
-      puts "Hi #{name}, which character do you want to use as your marker?" if other == 'none'
-      puts "Hi #{name}, which character do you want to use as your marker? (It can't be #{other})" unless other == 'none'
-      mark = gets.chomp
-      while mark == other
-        puts "It can't be #{mark}, pick something else!"
-        mark = gets.chomp
-      end
-      Player.new(name, mark)
-    end
-  
-    class << self
-      private
-  
-      def main_loop(one, two)
-        won = false
-        turn = 0
-        until won
-          turn.zero? ? one.play : two.play
-          if Player.played
-            turn.zero? ? turn += 1 : turn = 0
-            won = Board.check_winners
-            if Board.check_tie
-              won = Board.check_tie
-              turn = 2
-            end
-          end
-          Player.played = false
-        end
-        turn
-      end
-  
-      def win_text(turn, one, two)
-        Board.show
-        if turn.zero?
-          puts "Congrats #{two.name}, you won this game!"
-        elsif turn == 1
-          puts "Congrats #{one.name}, you won this game!"
-        else
-          puts "It's a Tie!"
-        end
-      end
-    end
-  end
-  
-  one = Game.new_player
-  two = Game.new_players(one.char)
-  
-  Game.play_game(one, two)
-  Board.reset
-  puts 'Do you want to play another round? (y/n)'
-  Game.play_game(one, two) if gets.chomp == 'y'
+end
+
+g = Game.new
+g.play
