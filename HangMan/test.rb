@@ -18,11 +18,34 @@ class Board
     end
 
   def show_lines(input)
-    number_of_letters = @chosen_word.length
-    puts input
-    puts number_of_letters
+    letter_split = input.to_s.split("")
+    word_hash = {}
+    letter_split.each do |i|
+      word_hash[i] = "_"
+    end
+    
+    word_hash.each_value do |value|
+        print " #{value} "
+    end
+
+    puts @chosen_word
   end
 
+  
 end
 
-a = Board.new
+#a = Board.new
+
+def correct_format?(input)
+    if input.to_s.length == 1
+      if input.match?(/[A-Za-z]/)
+        true
+      else
+        false
+      end
+    else
+      false
+    end
+end
+
+  puts correct_format?("3324")

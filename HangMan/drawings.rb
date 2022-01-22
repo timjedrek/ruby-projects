@@ -1,4 +1,33 @@
-def position_11
+module Drawings
+
+  def show_drawing(tries)
+    case tries.to_i
+    when 10
+      position_1
+    when 9
+      position_2
+    when 8
+      position_3  
+    when 7
+      position_4  
+    when 6
+      position_5  
+    when 5
+      position_6  
+    when 4
+      position_7  
+    when 3
+      position_8  
+    when 2
+      position_9  
+    when 1
+      position_10  
+    when 0
+      position_11
+    end
+  end
+
+  def position_11
     puts '''
       =======================
             +-------+
@@ -177,6 +206,11 @@ def position_11
       '''
   end
   
+
+  
+end
+  
+module Welcome
   def welcome
     hang_man_art = '''
      __ __                 __  ___        
@@ -191,5 +225,4 @@ def position_11
     puts copyright.cyan.underline
     puts ""
   end
-  
-  
+end
