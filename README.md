@@ -7,6 +7,7 @@ View: https://replit.com/@timjedrek/HangMan#main.rb
 
 **Summary**<br>
 Hangman game programmed in Ruby utilizing serialization for save/load feature
+
 **Notes**<br>
 January 21, 2022: Completed coding game portion of this program.  Still need to complete save/load function
 
