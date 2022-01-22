@@ -1,0 +1,8 @@
+--- !ruby/object:Board
+tries: 10
+selected_letters:
+- A
+- S
+incorrect_letters: []
+chosen_word: TARES
+guessed_word: "- A - - S"

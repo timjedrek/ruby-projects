@@ -1,0 +1,12 @@
+--- !ruby/object:Board
+tries: 8
+selected_letters:
+- S
+- F
+- W
+- O
+incorrect_letters:
+- F
+- W
+chosen_word: IMPROVISATORY
+guessed_word: "- - - - O - - S - - O - -"

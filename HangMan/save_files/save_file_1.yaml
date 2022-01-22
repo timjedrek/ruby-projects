@@ -1,0 +1,14 @@
+--- !ruby/object:Board
+tries: 7
+selected_letters:
+- S
+- D
+- F
+- R
+- T
+incorrect_letters:
+- S
+- D
+- F
+chosen_word: NITRATION
+guessed_word: "- - T R - T - - -"

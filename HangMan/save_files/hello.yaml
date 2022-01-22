@@ -1,0 +1,21 @@
+--- !ruby/object:Board
+tries: 4
+selected_letters:
+- H
+- A
+- O
+- E
+- S
+- R
+- F
+- U
+- N
+incorrect_letters:
+- H
+- O
+- S
+- F
+- U
+- N
+chosen_word: EXTRACTIBLE
+guessed_word: E - - R A - - - - - E

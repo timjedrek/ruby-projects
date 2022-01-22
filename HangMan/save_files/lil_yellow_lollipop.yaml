@@ -1,0 +1,18 @@
+--- !ruby/object:Board
+tries: 5
+selected_letters:
+- S
+- T
+- K
+- A
+- M
+- E
+- I
+incorrect_letters:
+- T
+- K
+- A
+- M
+- I
+chosen_word: SHYER
+guessed_word: S - - E -

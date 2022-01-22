@@ -1,0 +1,12 @@
+--- !ruby/object:Board
+tries: 8
+selected_letters:
+- A
+- B
+- S
+- R
+incorrect_letters:
+- B
+- S
+chosen_word: NOTARY
+guessed_word: "- - - A R -"

@@ -51,7 +51,7 @@ class Game
 
   def play_game
     puts "You chose to play a new game"
-    puts 'at anytime, if you want to access the menu type "MENU"'
+    puts 'At anytime, if you want to access the menu type "MENU"'
     sleep(2)
     @@started = true
     @@board = Board.new
@@ -61,6 +61,29 @@ class Game
 
   def load_game
     puts "You chose to load the game"
+    puts `clear`
+    filename = choose_game
+    saved = File.open(File.join(Dir.pwd, filename), 'r')
+    @@board = YAML.load(saved)
+    saved.close
+    @@started = true
+    @@board.play
+  end
+
+  def choose_game
+    begin
+      puts "Here are the current saved games. Please choose which you'd like to load."
+      filenames = Dir.glob('save_files/*').map { |file| file[(file.index('/') + 1)...(file.index('.'))] }
+      puts filenames
+      filename = gets.chomp
+      raise "#{filename} does not exist.".red unless filenames.include?(filename)
+      puts "#{filename} loading!"
+      puts
+      "/save_files/#{filename}.yaml"
+    rescue StandardError => e
+      puts e
+      retry
+    end
   end
 
   def save_game
@@ -83,6 +106,7 @@ class Game
     # Remove any character that aren't 0-9, A-Z, or a-z
     filename.gsub(/[^0-9A-Z]/i, '_')
   end
+
   def not_started
     puts "No game has been started yet"
     sleep(1)
@@ -113,12 +137,11 @@ class Game
   end
 
   def validate_mm_selection(input)
-    puts "Try again. #{input} is not valid. Enter a number between 1-4"
+    puts "Try again. #{input} is not valid. Enter a number between 1-5"
     show_mm_selection
     new_input = gets.chomp
     mm_selection_handler(new_input)
   end
-
 end
 
 class Board < Game
@@ -180,7 +203,7 @@ class Board < Game
   end
 
   def get_letter_guess
-    user_guess = gets.chomp
+    user_guess = gets.chomp.upcase
     if user_guess == "MENU"
       start
     elsif valid_guess?(user_guess)

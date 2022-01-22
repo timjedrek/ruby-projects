@@ -1,0 +1,15 @@
+--- !ruby/object:Board
+tries: 6
+selected_letters:
+- D
+- F
+- U
+- C
+- K
+incorrect_letters:
+- D
+- U
+- C
+- K
+chosen_word: FAMILY
+guessed_word: F - - - - -
