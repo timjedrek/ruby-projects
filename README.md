@@ -10,7 +10,7 @@ Hangman game programmed in Ruby utilizing serialization for save/load feature
 
 **Details**<br>
 Created: January 16, 2022<br>
-Completed: January 21, 2022<<br>
+Completed: January 21, 2022<br>
 
 ## Tic Tac Toe ##
 
