@@ -64,24 +64,51 @@ class Game
   end
 
   def save_game
-    puts "You chose to save the game"
+    if game_started?
+      puts "You chose to save the game"
+      puts `clear`
+      puts "Please enter save file name:"
+      save_name = gets.chomp
+      cleaned_name = sanitize(save_name)
+      File.new "save_files/#{cleaned_name}.yaml","w"
+      dump = YAML.dump(@@board)
+      File.open(File.join(Dir.pwd, "/save_files/#{cleaned_name}.yaml"), 'w') { |file| file.write dump }
+      resume_game
+    else
+      not_started
+    end
+  end
 
+  def sanitize(filename)
+    # Remove any character that aren't 0-9, A-Z, or a-z
+    filename.gsub(/[^0-9A-Z]/i, '_')
+  end
+  def not_started
+    puts "No game has been started yet"
+    sleep(1)
+    start
   end
 
   def end_game
     puts "You chose to end the game"
-    puts "Goodbye!"
+    abort "Goodbye!"
   end
 
   def resume_game
-    if @@started == false
-      puts "No game has been started yet"
-      sleep(1)
-      start
-    else    
-      puts "You chose to resume the game"
+    if game_started?
+      puts "Resuming the game"
       sleep(1)
       @@board.play
+    else    
+      not_started
+    end
+  end
+
+  def game_started?
+    if @@started == false
+      false
+    else
+      true
     end
   end
 
@@ -95,7 +122,7 @@ class Game
 end
 
 class Board < Game
-    include Drawings
+  include Drawings
   attr_accessor :tries, :selected_letters, :chosen_word
 
   #using initialize as a reset
