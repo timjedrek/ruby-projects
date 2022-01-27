@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-require_relative 'main_menu'
+require_relative 'menus'
 require_relative 'format'
 require_relative 'board'
 require_relative 'player'
 
 # Class to hold the game
 class Game
-  include MainMenu
+  include Menus
 
   def initialize
     @board = Board.new
@@ -18,6 +18,8 @@ class Game
 
   def play_game
     puts 'You chose to play the game'
+    sleep(1)
+    player_selection_menu
   end
 
   def load_game
