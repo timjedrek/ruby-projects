@@ -1,17 +1,6 @@
 # Ruby Projects
 A collection of ruby projects
 
-## Chess ##
-
-View: N/A
-
-**Summary**<br>
-A game of chess programmed in Ruby.  Testing to be completed using RSPEC.  Saving/loading using serialization.  Future plan is to create a simple AI that moves pieces randomly following the constraints of the rules of chess.
-
-**Details**<br>
-Created: January 26, 2022<br>
-Completed: N/A<br>
-
 ## Hang Man ##
 
 View: https://replit.com/@timjedrek/HangMan#main.rb
