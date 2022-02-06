@@ -6,7 +6,7 @@ A collection of ruby projects
 View: https://replit.com/@timjedrek/HangMan#main.rb
 
 **Summary**<br>
-Hangman game programmed in Ruby utilizing serialization for save/load feature
+Hangman game programmed in Ruby utilizing serialization for save/load feature 
 
 **Details**<br>
 Created: January 16, 2022<br>
